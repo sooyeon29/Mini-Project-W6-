@@ -1,0 +1,64 @@
+{
+  "posts": [
+    {
+      "id": 1,
+      "title": "json-server",
+      "author": "typicode"
+    },
+    {
+      "postId": 1,
+      "title": "",
+      "images": "",
+      "content": "dfsaf",
+      "like": "",
+      "dislike": "",
+      "id": 2
+    },
+    {
+      "postId": 1,
+      "title": "",
+      "images": "",
+      "content": "sfsdfsd",
+      "like": "",
+      "dislike": "",
+      "id": 3
+    },
+    {
+      "postId": 1,
+      "title": "",
+      "images": "",
+      "content": "gagasgsagsdg",
+      "like": "",
+      "dislike": "",
+      "id": 4
+    },
+    {
+      "postId": 1,
+      "title": "",
+      "images": "",
+      "content": "agasdg",
+      "like": "",
+      "dislike": "",
+      "id": 5
+    },
+    {
+      "postId": 1,
+      "title": "",
+      "images": "",
+      "content": "안뇽\n",
+      "like": "",
+      "dislike": "",
+      "id": 6
+    }
+  ],
+  "comments": [
+    {
+      "id": 1,
+      "body": "some comment",
+      "postId": 1
+    }
+  ],
+  "profile": {
+    "name": "typicode"
+  }
+}
