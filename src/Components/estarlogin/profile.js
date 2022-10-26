@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { __postLoginid, __postUserid } from "../../redux/modules/loginSlice";
 import useInput from "../hooks/useInput";
 
-const Signup = () => {
+const Profile = () => {
   //랜덤닉네임 api 근데 두개식 묶여서 나온다.
   // const word = RandomApi();
   const dispatch = useDispatch();
@@ -74,7 +74,7 @@ const Signup = () => {
           <AddTodoCtn>
             <AddTodoCtnArea>
               <AddTodoBox>
-                <AddTodoTitle>아이디</AddTodoTitle>
+                <AddTodoTitle>닉네임</AddTodoTitle>
                 <AddTodoTextarea
                   value={Signup.loginId}
                   name="loginId"
@@ -153,7 +153,7 @@ const AddTodoCtn = styled.div`
   margin: 50px auto 0 auto;
   max-width: 500px;
   max-height: 800px;
-  /* height: calc(100vh - 60px); */
+  height: calc(100vh - 60px);
   box-sizing: border-box;
   padding: 20px;
   display: flex;
@@ -174,8 +174,8 @@ const AddTodoCtnArea = styled.form`
   display: flex;
   flex-direction: column;
   gap: 20px;
-  /* box-sizing: border-box; */
-  /* height: 100%; */
+  box-sizing: border-box;
+  height: 100%;
 `;
 const AddTodoBox = styled.div`
   display: flex;
@@ -207,8 +207,6 @@ const AddTodoTextarea = styled.input`
 const BtnSet = styled.div`
   display: flex;
   flex-direction: row;
-  margin-top: 30px;
-  margin-bottom: 10px;
 `;
 
 const PostBtn = styled.button`
@@ -233,4 +231,4 @@ const PostBtn = styled.button`
 //   z-index: -1;
 // `;
 
-export default Signup;
+export default Profile;
