@@ -3,6 +3,10 @@ import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { __postLoginid, __postUserid } from "../../redux/modules/loginSlice";
 import useInput from "../hooks/useInput";
+import Swal from "sweetalert2";
+import { resolvePath } from "react-router-dom";
+import RandomApi from "../../mytools/RandomApi";
+import { setCookie } from "./cookiehook";
 
 const Signup = () => {
   //랜덤닉네임 api 근데 두개식 묶여서 나온다.
@@ -19,7 +23,8 @@ const Signup = () => {
     confirm: "",
   };
 
-  // const { token } = useSelector((state) => state.login.token);
+  // const RandomNickname = RandomApi();
+  // console.log(RandomNickname);
 
   const [Signup, SetSignup, onChangehandler] = useInput(initialstate);
 
@@ -31,26 +36,20 @@ const Signup = () => {
   //아이디는 5자리 + 특수문자 1개
   const isValidloginId = Signup.loginId.length >= 5 && specialLetter >= 1;
 
-  //커스텀훅으로 빼자.
-  // const onChangehandler = (e) => {
-  //   const { name, value } = e.target;
-  //   console.log(Signup);
-  //   SetSignup({ ...Signup, [name]: value });
-  // };
-  // const [Signup, SetSignup] = useState(initialstate);
-
   const onSubmithandler = (e) => {
     //회원가입화면
     if (isEdit) {
       dispatch(__postUserid(Signup));
+      // const [Word, Setword] = useState(Signup.nickname);
       SetSignup(initialstate);
+
       SetisEdit(!isEdit);
     } else {
       //로그인화면
       dispatch(
         __postLoginid({ password: Signup.password, loginId: Signup.loginId })
       );
-
+      // setCookie("Nickname", Signup.nickname, { path: "/" });
       // dispatch(__postLoginid(getCookie("token")));
       // console.log({ password: Signup.password, loginId: Signup.loginId });
       // SetSignup(initialstate);
@@ -61,112 +60,110 @@ const Signup = () => {
 
   if (isLoading) {
     <div>로딩중입니당</div>;
-  } else if (error) {
-    if (window.confirm("아이디와 비밀번호를 확인해주세요"))
-      window.location.replace("/estarlogin");
   } else {
-    if (login) {
-      window.confirm("로그인 성공! 메인으로 돌아갑니다.");
-      window.location.replace("/");
-    } else {
-      return (
-        <>
-          <AddTodoCtn>
-            <AddTodoCtnArea>
-              <AddTodoBox>
-                <AddTodoTitle>아이디</AddTodoTitle>
-                <AddTodoTextarea
-                  value={Signup.loginId}
-                  name="loginId"
-                  onChange={onChangehandler}
-                />
-              </AddTodoBox>
-              <AddTodoBox>
-                {isEdit && (
-                  <>
-                    <AddTodoTitle>닉네임</AddTodoTitle>
-                    <AddTodoInput
-                      value={Signup.nickname}
-                      name="nickname"
-                      onChange={onChangehandler}
-                    />
-                  </>
-                )}
-              </AddTodoBox>
-              <AddTodoBox>
-                <AddTodoTitle>비밀번호</AddTodoTitle>
-                <AddTodoTextarea
-                  value={Signup.password}
-                  name="password"
-                  onChange={onChangehandler}
-                  placeholder="8자리이상, 특수문자 1개이상"
-                />
-              </AddTodoBox>
-              <AddTodoBox>
-                {isEdit && (
-                  <>
-                    <AddTodoTitle>비밀번호 재확인</AddTodoTitle>
-                    <AddTodoTextarea
-                      value={Signup.confirm}
-                      name="confirm"
-                      onChange={onChangehandler}
-                    />
-                  </>
-                )}
-              </AddTodoBox>
-            </AddTodoCtnArea>
-            <BtnSet>
-              <PostBtn
-                // disabled={
-                //   !isValidPassword || !isValidloginId ? "disabled" : false
-                // }
-                type="submit"
-                style={{ margin: "auto" }}
-                onClick={() => {
-                  onSubmithandler();
-                }}
-              >
-                {isEdit ? "DONE" : "SIGN IN"}
-              </PostBtn>
-              <PostBtn
-                disabled={
-                  isValidPassword || isValidloginId ? "disabled" : false
-                }
-                style={{ margin: "auto" }}
-                onClick={() => {
-                  SetisEdit(!isEdit);
-                  SetSignup(initialstate);
-                }}
-              >
-                {isEdit ? "RETRUN" : "SIGN UP"}
-              </PostBtn>
-            </BtnSet>
-          </AddTodoCtn>
-          {/* <Line></Line> */}
-        </>
-      );
-    }
+    return (
+      <>
+        <AddTodoCtn>
+          <AddTodoCtnArea>
+            <AddTodoBox>
+              <AddTodoTitle>아이디</AddTodoTitle>
+              <AddTodoTextarea
+                value={Signup.loginId}
+                name="loginId"
+                onChange={onChangehandler}
+              />
+            </AddTodoBox>
+            <AddTodoBox>
+              {isEdit && (
+                <>
+                  <AddTodoTitle>닉네임</AddTodoTitle>
+                  <AddTodoInput
+                    // maxLength={5}
+                    placeholder="5글자 이내"
+                    value={Signup.nickname}
+                    name="nickname"
+                    onChange={onChangehandler}
+                  />
+                </>
+              )}
+            </AddTodoBox>
+            <AddTodoBox>
+              <AddTodoTitle>비밀번호</AddTodoTitle>
+              <AddTodoTextarea
+                type="password"
+                value={Signup.password}
+                name="password"
+                onChange={onChangehandler}
+                placeholder="8자리이상, 특수문자 1개이상"
+              />
+            </AddTodoBox>
+            <AddTodoBox>
+              {isEdit && (
+                <>
+                  <AddTodoTitle>비밀번호 재확인</AddTodoTitle>
+                  <AddTodoTextarea
+                    type="password"
+                    value={Signup.confirm}
+                    name="confirm"
+                    onChange={onChangehandler}
+                  />
+                </>
+              )}
+            </AddTodoBox>
+          </AddTodoCtnArea>
+          <BtnSet>
+            <PostBtn
+              // disabled={
+              //   !isValidPassword || !isValidloginId ? "disabled" : false
+              // }
+              type="submit"
+              style={{ margin: "auto" }}
+              onClick={() => {
+                onSubmithandler();
+              }}
+            >
+              {isEdit ? "DONE" : "SIGN IN"}
+            </PostBtn>
+            <PostBtn
+              // disabled={
+              //   isValidPassword || isValidloginId ? "disabled" : false
+              // }
+              style={{ margin: "auto" }}
+              onClick={() => {
+                SetisEdit(!isEdit);
+                SetSignup(initialstate);
+              }}
+            >
+              {isEdit ? "RETRUN" : "SIGN UP"}
+            </PostBtn>
+          </BtnSet>
+        </AddTodoCtn>
+        {/* <Line></Line> */}
+      </>
+    );
   }
 };
+// };
 
 const AddTodoCtn = styled.div`
-  margin: 50px auto 0 auto;
+  margin: 100px auto;
   max-width: 500px;
   max-height: 800px;
   /* height: calc(100vh - 60px); */
-  box-sizing: border-box;
+  /* box-sizing: border-box; */
   padding: 20px;
   display: flex;
   flex-direction: column;
-  background: rgb(255, 110, 64);
+  background-color: #f7efea;
+  /* background: rgb(255, 110, 64);
   background: linear-gradient(
     0deg,
     rgba(255, 110, 64, 1) 0%,
     rgba(255, 255, 255, 0) 59%
-  );
+  ); */
   justify-content: space-between;
   border-radius: 10px;
-  box-shadow: 5px 5px 10px #babebc;
+  box-shadow: 0px 0px 10px gray;
   width: 768px;
   min-height: 480px;
 `;
@@ -214,10 +211,11 @@ const BtnSet = styled.div`
 const PostBtn = styled.button`
   box-shadow: 5px 5px 8px #babebc;
   border-radius: 10px;
-  background-color: white;
+  background-color: #ffae7b;
   height: 60px;
   width: 120px;
   :hover {
+    font-weight: bold;
     transform: scale(1.1);
     background-color: white;
     box-shadow: 0px 3px 3px 0px gray;

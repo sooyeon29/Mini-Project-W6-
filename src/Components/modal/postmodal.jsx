@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import "./modal.css";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -6,8 +7,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { __addEstar } from "../../redux/modules/PostSlice";
 import Swal from "sweetalert2";
 
-const PostPage = () => {
-  const navigate = useNavigate();
+const PostModal = (props) => {
+  // 열기, 닫기, 모달 헤더 텍스트를 부모로부터 받아옴
+  const { open, close, header } = props;
   const dispatch = useDispatch();
   const { error } = useSelector((state) => state.estar);
   // const [value, onChange] = usePost();
@@ -99,124 +101,104 @@ const PostPage = () => {
 
     //Post dispatch
     dispatch(__addEstar(sendFD));
-
-    Swal.fire({
-      position: "top-end",
-      icon: "success",
-      title: "게시글 작성! 😎",
-      showConfirmButton: false,
-      timer: 1500,
-    });
-
-    // window.confirm("게시글이 작성되었습니다 !");
-    // window.location.replace("/estarlist");
+    // 알럿이 모달창 밑에 뜸
+    // Swal.fire({
+    //   position: "top-left",
+    //   icon: "success",
+    //   title: "게시글 작성! 😎",
+    //   showConfirmButton: false,
+    //   timer: 1500,
+    // });
   };
 
-  console.log("preview출력", preview);
-  console.log("img출력", img);
-  console.log("제목출력", title);
-  console.log("내용출력", comment);
-
   return (
-    <BigCard>
-      <BackButton
-        onClick={() => {
-          navigate("/estarlist");
-        }}
-      >
-        Back
-      </BackButton>
+    // 모달이 열릴때 openModal 클래스가 생성된다.
+    <div className={open ? "openModal modal" : "modal"}>
+      {open ? (
+        <section>
+          <header>
+            {header}
+            <button className="close" onClick={close}>
+              &times;
+            </button>
+          </header>
+          <main>
+            <Card enctype="multipart/form-data">
+              <Photo>
+                <Preview>
+                  {preview.length > 0 ? (
+                    <img
+                      key={1}
+                      src={preview}
+                      alt="미리보기"
+                      style={{
+                        width: `100%`,
+                        height: `100%`,
+                      }}
+                    />
+                  ) : (
+                    <div>사진을 추가해 주세요</div>
+                  )}
+                </Preview>
+                <Upload>
+                  <UploadInput
+                    id="upload-input"
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      handleImagePreview(e);
+                    }}
+                    multiple="multiple"
+                  ></UploadInput>
+                  <UploadInputDesign htmlFor="upload-input">
+                    사진 추가
+                  </UploadInputDesign>
+                  <PhotoResetButton
+                    onClick={() => {
+                      onPhotoDelete();
+                    }}
+                  >
+                    내용 다시 쓰기
+                  </PhotoResetButton>
+                </Upload>
+              </Photo>
+              <Half>
+                <Title
+                  name="title"
+                  value={title}
+                  placeholder="제목 적어죠"
+                  onChange={onTitleChange}
+                />
+                <Write
+                  name="content"
+                  value={comment}
+                  placeholder="텍스트를 적는 공간"
+                  onChange={onCommentChange}
+                ></Write>
+              </Half>
 
-      <Card enctype="multipart/form-data">
-        <Photo>
-          <Preview>
-            {preview.length > 0 ? (
-              <img
-                key={1}
-                src={preview}
-                alt="미리보기"
-                style={{
-                  width: `100%`,
-                  height: `100%`,
-                }}
-              />
-            ) : (
-              <div>사진을 추가해 주세요</div>
-            )}
-          </Preview>
-          <Upload>
-            <UploadInput
-              id="upload-input"
-              type="file"
-              // name="images"
-              // value={value.images}
-              accept="image/*"
-              onChange={(e) => {
-                handleImagePreview(e);
-              }}
-              multiple="multiple"
-            ></UploadInput>
-            <UploadInputDesign htmlFor="upload-input">
-              사진 추가
-            </UploadInputDesign>
-            <PhotoResetButton
-              onClick={() => {
-                onPhotoDelete();
-              }}
-            >
-              내용 다시 쓰기
-            </PhotoResetButton>
-          </Upload>
-        </Photo>
-        <Half>
-          <Title
-            name="title"
-            value={title}
-            placeholder="제목 적어죠"
-            onChange={onTitleChange}
-          />
-          <Write
-            name="content"
-            value={comment}
-            placeholder="텍스트를 적는 공간"
-            onChange={onCommentChange}
-          ></Write>
-        </Half>
-
-        <UploadButton onClick={onSubmit}>업로드 하기</UploadButton>
-      </Card>
-    </BigCard>
+              <UploadButton onClick={onSubmit}>업로드 하기</UploadButton>
+            </Card>
+            {props.children}
+          </main>
+          <footer>
+            <button className="close" onClick={close}>
+              close
+            </button>
+          </footer>
+        </section>
+      ) : null}
+    </div>
   );
 };
 
-export default PostPage;
-
-const BigCard = styled.div`
-  width: 90%;
-  height: 500px;
-  background-color: lightgray;
-  border: 1px solid black;
-  box-shadow: 5px 5px gray;
-  border-radius: 20px;
-  margin: 100px auto;
-  position: relative;
-`;
-
-const BackButton = styled.button`
-  width: 120px;
-  height: 34px;
-  text-align: center;
-  background-color: white;
-  position: absolute;
-  top: 16px;
-  right: 5%;
-`;
+export default PostModal;
 
 const UploadButton = styled.button``;
 const Card = styled.form`
-  width: 90%;
-  height: 80%;
-  margin: 60px auto 20px auto;
+  /* width: 90%;
+  height: 80%; */
+  margin: 0 auto;
   text-align: center;
   background-color: white;
   display: flex;
@@ -224,18 +206,54 @@ const Card = styled.form`
   position: relative;
   padding: 10px;
 
+  div {
+    margin-bottom: 30px;
+  }
+
   ${UploadButton} {
-    width: 100px;
+    /* width: 120px;
     height: 50px;
     background-color: lightgray;
     border-radius: 10px;
     position: absolute;
     bottom: 0;
     left: 50%;
-    margin-left: -50px;
+    margin-left: -60px;
     margin-bottom: 10px;
+
+    color: #fff;
+    background-color: #6c757d;
+    font-size: 18px; */
+
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    margin-left: -60px;
+    border: none;
+    display: inline-block;
+    padding: 15px 30px;
+    border-radius: 15px;
+    font-family: "paybooc-Light", sans-serif;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    text-decoration: none;
+    transition: 0.25s;
+    background: #ffae7b;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+
     :hover {
-      background: gray;
+      background: #ef6c00;
+      color: white;
+      font-weight: bold;
+      box-shadow: 1px 1px 3px 0 gray;
+      letter-spacing: 2px;
+      transform: scale(1.1);
+      margin-left: -64px;
+    }
+
+    :active {
+      transform: scale(1.3);
     }
   }
 `;
@@ -245,7 +263,7 @@ const Photo = styled.div`
   width: 45%;
 
   ${Preview} {
-    border: 1px solid black;
+    border: 1px solid #f7efea;
     height: 300px;
     width: 100%;
     margin-bottom: 20px;
@@ -255,7 +273,7 @@ const Photo = styled.div`
     flex-wrap: wrap;
     img {
       //스타일드 컴포넌트내에 있는 태그
-      object-fit: cover;
+      object-fit: contain;
       /* border: 1px solid black; */
     }
     div {
@@ -280,24 +298,25 @@ const Upload = styled.div`
   ${UploadInputDesign} {
     display: inline-block;
     width: 130px;
-    height: 30px;
-    line-height: 30px;
+    height: 40px;
+    line-height: 40px;
     vertical-align: middle;
-    background-color: lightgray;
+    background-color: #f7efea;
     border-radius: 10px;
     margin-right: 10px;
+    cursor: pointer;
     :hover {
-      background: gray;
+      background: #ffae7b;
     }
   }
 
   ${PhotoResetButton} {
     width: 130px;
-    height: 30px;
-    background-color: lightgray;
+    height: 40px;
+    background-color: #f7efea;
     border-radius: 10px;
     :hover {
-      background: gray;
+      background: #ffae7b;
     }
   }
 `;
@@ -307,19 +326,24 @@ const Write = styled.textarea``;
 const Half = styled.div`
   width: 45%;
   height: 300px;
-  background-color: lightblue;
+  background-color: #f7efea;
+  border: 1px solid #f7efea;
+  border-radius: 20px;
+  padding: 10px;
   ${Title} {
+    border-radius: 20px 20px 0 0;
     width: 100%;
-    height: 100px;
+    height: 70px;
     padding: 15px;
     line-height: 100px;
     vertical-align: middle;
   }
 
   ${Write} {
-    background-color: pink;
+    border-radius: 0 0 20px 20px;
+    background-color: #f7efea;
     width: 100%;
-    height: 200px;
+    height: 205px;
     padding: 16px;
     resize: none;
   }
