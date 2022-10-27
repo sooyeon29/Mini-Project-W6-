@@ -134,7 +134,7 @@ const Signup = () => {
                 SetSignup(initialstate);
               }}
             >
-              {isEdit ? "RETRUN" : "SIGN UP"}
+              {isEdit ? "RETURN" : "SIGN UP"}
             </PostBtn>
           </BtnSet>
         </AddTodoCtn>
