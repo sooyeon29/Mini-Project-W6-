@@ -1,22 +1,43 @@
-# DUCK-GRAM mini-project
+## 항해99에서 진행한 첫 협업 프로젝트
 
-![--unscreen](https://user-images.githubusercontent.com/111853363/198197818-d1b3f9df-c9b7-4c10-ae5e-afdd96cddee6.gif)
+#### 프로젝트 상세설명
+---
+2022.10.21 ~ 2022.10.27까지 1주간 진행된 클론프로젝트
 
-![diagram-export-2022. 10. 21. 오후 3_34_36.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/56cec6d8-e342-4556-9563-2a806f93de72/diagram-export-2022._10._21._%EC%98%A4%ED%9B%84_3_34_36.png)
+구성인원: FE 3명/ BE3 명
 
-폴더 및 파일
+---
 
-- Components
-  > estardetail
-  > estarlist
-  > estarlogin
-  > estarpost
-- hooks
-- mytools
-  > instance
-  > like
-  > likeApp
-  > RandomApi
-- Pages
-- redux
-- shared
+
+
+아래는 시연영상입니다.
+
+![title](https://user-images.githubusercontent.com/113953473/198820439-4994589f-7ff2-478d-9b82-db1f5a281cbf.gif)   
+
+![title](https://user-images.githubusercontent.com/113953473/198820442-ebcbf59d-4a32-4b03-9580-a09da3e3a0aa.gif)   
+
+
+---
+## 주제
+**덕스타그램**
+
+- 게시글 작성
+- 게시글 삭제
+- 게시글 수정
+- 게시글 댓글작성
+- 게시글 댓글삭제
+- 게시글 댓글수정
+
+
+---
+### 추가기능
+- **폼데이터**를 이용한 사진업로드(FormData 및 아마존 S3사용)
+- **무한스크롤구현** (useInview 훅과 react-intersection-observer 라이브러리 사용)
+- **실시간 채팅구현** (socket.io 라이브러리 사용)
+
+---
+   
+
+
+
+
